@@ -1,0 +1,166 @@
+<p-toast></p-toast>
+<nav class="navbar navbar-default navbar-expand-lg navbar-dark bg-dark">
+
+  <a class="navbar-brand" href="#">cj92
+    <b>Website</b>
+  </a>
+  <button type="button" data-target="#navbarCollapse" data-toggle="collapse"
+          class="navbar-toggle navbar-toggler ml-auto">
+    <span class="navbar-toggler-icon"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button>
+
+  <!-- Collection of nav links, forms, and other content for toggling -->
+  <div id="navbarCollapse" class="collapse navbar-collapse justify-content-start">
+    <ul class="nav navbar-nav mr-auto">
+      <li class="nav-item">
+        <a routerLink="/start" routerLinkActive="active" class="nav-link">Start</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link">O projekcjie</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a data-toggle="dropdown" class="nav-link dropdown-toggle" href="#">Usługi
+          <b class="caret"></b>
+        </a>
+        <ul class="dropdown-menu">
+          <li>
+            <a href="#" class="dropdown-item">Wystaw fakture</a>
+          </li>
+          <li>
+            <a href="#" class="dropdown-item">Klienci</a>
+          </li>
+          <li>
+            <a href="#" class="dropdown-item">Raporty</a>
+          </li>
+          <li>
+            <a href="#" class="dropdown-item">Dane Osobiste</a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-item active">
+        <a href="#" class="nav-link">Ceny</a>
+      </li>
+      <div *ngIf="isAdmin">
+        <li class="nav-item">
+          <a routerLink="/admin" routerLinkActive="active" class="nav-link">Panel Administracyjny</a>
+        </li>
+      </div>
+
+      <li class="nav-item">
+        <a routerLink="/contact" routerLinkActive="active" class="nav-link">Kontakt</a>
+      </li>
+    </ul>
+    <div *ngIf="!logged">
+      <div class="nav navbar-nav navbar-right ml-auto">
+        <li class="nav-item">
+          <a data-toggle="dropdown" class="nav-link dropdown-toggle" href="#">Zaloguj</a>
+          <ul class="dropdown-menu form-wrapper dropdown-menu-right">
+            <li>
+
+              <p class="hint-text">Dane do logowania</p>
+              <p *ngIf="errorlog" class="text-warning">Użytkownik lub hasło nie jest prawidłowe!</p>
+
+              <div class="form-group">
+                <input [(ngModel)]="username1" type="text" class="form-control" placeholder="Username">
+              </div>
+              <div class="form-group">
+                <input [(ngModel)]= "password1" type="password" class="form-control" placeholder="Password">
+              </div>
+              <input (click)="login(username1, password1)" type="submit" class="btn btn-secondary btn-block"
+                                                           value="Login">
+              <div class="form-footer">
+                <a routerLink="/remindpassword" routerLinkActive="active">Zapomniałeś hasło?</a>
+              </div>
+
+            </li>
+          </ul>
+        </li>
+        <div class="nav-item">
+          <a href="#" data-toggle="dropdown" class="btn btn-secondary dropdown-toggle get-started-btn mt-1 mb-1">
+            Zarejstruj
+          </a>
+          <div [ngbCollapse]="isRegisterCollapsed" class="dropdown-menu form-wrapper dropdown-menu-right">
+            <div>
+              <form>
+                <div>
+                  <p class="hint-text">Wypełnij by utworzyć użytkownika!</p>
+                  <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Username"
+                           name="username2"  [(ngModel)]="registerUser.username"
+                           required maxlength="30" minlength="5" #username2="ngModel">
+                    <p class="text-danger" *ngIf="username2.errors?.required && username2.touched ">
+                      Nazwa użytkownika jest wymagany!!!
+                    </p>
+                    <p class="text-danger" *ngIf="username2.errors?.minlength && username2.touched ">
+                      Minimalna dlugośc nazwy użytkownika to 5 znaków!!!
+                    </p>
+                  </div>
+                  <div class="form-group">
+                    <input (focus)="divider=true" (blur)="divider=false" type="password" pPassword class="form-control"
+                                                                         placeholder="Password"
+                                                                         name="password" [(ngModel)]="registerUser.password"
+                                                                         required maxlength="16"
+                                                                         minlength="6" #password="ngModel">
+                    <p *ngIf="divider">
+                      <br>
+                      <br>
+                    </p>
+                    <p class="text-danger" *ngIf="password.errors?.required && password.touched ">
+                      Hasło jest wymagany!!!
+                    </p>
+                    <p
+                      class="text-danger" *ngIf="(password.errors?.minlength || password.errors?.maxlength) && password.touched ">
+                      Hasło musi mieć pomiedzy 6 a 16 znaków.
+                    </p>
+                  </div>
+                  <div class="form-group">
+                    <input type="password" class="form-control" placeholder="Confirm Password" name="confirm"
+                           required="required" [(ngModel)]="confirmPassword" #confirm="ngModel" >
+                    <p class="text-danger" *ngIf=" (confirmPassword != registerUser.password) && confirm.touched ">
+                      Hasła muszą się zgadzać.
+                    </p>
+
+
+                  </div>
+                  <div class="form-group">
+                    <input type="text" class="form-control" placeholder="E-mail" required="required"
+                           name="email" [(ngModel)]="registerUser.email" required
+                           maxlength="30" minlength="6" #email="ngModel">
+                    <p class="text-danger" *ngIf="email.errors?.required && email.touched ">
+                      Email jest wymagany!!!
+                    </p>
+                    <p
+                      class="text-danger" *ngIf="(email.errors?.minlength || email.errors?.maxlength) && email.touched ">
+                      Email musi mieć przynajmniej 6 znaków, nie wiecej niż 30.
+                    </p>
+                  </div>
+                  <div class="form-group">
+                    <label class="checkbox-inline">
+                      <input type="checkbox">
+                      Akceptuje
+                      <a routerLink="/terms&conditions" routerLinkActive="active">regulamin</a>
+                    </label>
+                  </div>
+                  <input type="submit" class="btn btn-secondary btn-block"
+                         value="Zarejstruj" (click)="registerNewUser(registerUser)">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="logged">
+      <ul class="nav navbar-nav navbar-right ml-auto">
+        <li class="nav-item">
+          <a (click)="logout()" href="#" data-toggle="dropdown" class="btn btn-secondary  get-started-btn mt-1 mb-1">
+            Wyloguj
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

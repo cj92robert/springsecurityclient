@@ -1,0 +1,44 @@
+<p-toast></p-toast>
+<div class="container border border-dark rounded">
+  <div class="row"></div>
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class=" col-md-8 ">
+
+
+      <table class="table">
+        <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Login</th>
+          <th scope="col">Imie</th>
+          <th scope="col">Nazwisko</th>
+          <th scope="col">E-mail</th>
+          <th scope="col">Aktywny</th>
+          <th scope="col">Skasuj</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of users">
+          <th scope="row">{{user.id}}</th>
+          <td>{{user.username}}</td>
+          <td>{{user.name}}</td>
+          <td>{{user.lastname}}</td>
+          <td>{{user.email}}</td>
+          <td *ngIf="user.enabled">tak</td>
+          <td *ngIf="!user.enabled">nie</td>
+          <td>
+            <button (click)="delete(user)" class="btn-danger">Kasuj</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="size>5">
+        <p-paginator [rows]="5" totalRecords="{{size}}" (onPageChange)="paginate($event)"></p-paginator>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+</div>
